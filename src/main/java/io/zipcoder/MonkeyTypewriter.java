@@ -1,5 +1,8 @@
 package io.zipcoder;
 
+import java.util.Arrays;
+
+
 public class MonkeyTypewriter {
     public static void main(String[] args) {
         String introduction = "It was the best of times,\n" +
@@ -30,13 +33,38 @@ public class MonkeyTypewriter {
         Thread[] safeThread = new Thread[5];
         for (int i = 0; i < 5; i++) {
             safeThread[i] = new Thread(safeCopier);
-            safeThread[i].run();
         }
+        for(Thread safe : safeThread){
+            safe.start();
+        }
+        try {
+            for (Thread safe : safeThread) {
+                safe.join();
+            }
+        }
+        catch (InterruptedException e){
+                System.out.println("Main interrupted");
+            }
+
 
         Thread[] unsafeThread = new Thread[5];
         for (int i = 0; i < 5; i++) {
             unsafeThread[i] = new Thread(unsafeCopier);
-            unsafeThread[i].run();
+        }
+        for(Thread unsafe : unsafeThread){
+            unsafe.start();
+        }
+
+        for(Thread unsafe : unsafeThread){
+            unsafe.start();
+        }
+        try {
+            for (Thread unsafe : unsafeThread) {
+                unsafe.join();
+            }
+        }
+        catch (InterruptedException e){
+            System.out.println("Main interrupted");
         }
 
 
@@ -49,7 +77,7 @@ public class MonkeyTypewriter {
         }
 
         // Print out the copied versions here.
-        System.out.println("Safe copy\n:" + safeCopier.copied);
-        System.out.println("Unsafe copy\n:" + unsafeCopier.copied);
+        System.out.println("Safe copy\n:" + Arrays.toString(safeThread));
+        System.out.println("Unsafe copy\n:" + unsafeCopier.toString());
     }
 }
